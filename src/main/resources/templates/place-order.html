@@ -1,0 +1,72 @@
+<html>
+<head>
+    <title>Robobar - Futuristic drinks</title>
+    <link rel="stylesheet" href="/darkly/bootstrap.css">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h1 class="col-12 display-2">Robobar
+            <small class="text-muted">Futuristic drinks</small>
+        </h1>
+    </div>
+    <div class="row">
+        <h2 class="col-12 display-4">Place order - prrrt</h2>
+    </div>
+    <div class="row">
+        <table class="table col-12">
+            <thead>
+            <tr>
+                <th>Drink</th>
+                <th colspan="2">Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="drink: ${drinks}">
+                <td th:text="${drink.name}"></td>
+                <td th:text="|&euro; ${#numbers.formatDecimal(drink.price, 1, 2, 'COMMA')}|"></td>
+                <td>
+                    <div class="row">
+                        <div class="col-5 input-group">
+                            <div class="input-group-prepend">
+                                <button th:onclick="'window.location.href=\'' + @{/decrement/{id}(id=${drink.id})} + '\''"
+                                        class="btn btn-dark">-
+                                </button>
+                            </div>
+                            <input class="form-control" type="number" th:value="${drink.amount}" readonly>
+                            <div class="input-group-append">
+                                <button th:onclick="'window.location.href=\'' + @{/increment/{id}(id=${drink.id})} + '\''"
+                                        class="btn btn-dark">+
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>Total</th>
+                <th th:text="|&euro; ${#numbers.formatDecimal(totalPrice, 1, 2, 'COMMA')}|"></th>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <button class="btn btn-success" th:disabled="${#bools.isFalse(totalPrice)}"
+                    th:onclick="window.location.href='/reviewOrder'" type="submit">Submit order
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            &nbsp;
+        </div>
+    </div>
+    <div class="alert alert-default" role="alert">
+        <h4 class="alert-heading">Prrt!</h4>
+        Curious about the <a target="_blank" href="/jacoco/index.html">code coverage report</a> or the <a
+            target="_blank" href="/pitest-reports/index.html">mutation testing report</a>?
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<html>
+<head>
+    <title>Robobar - Futuristic drinks</title>
+    <link rel="stylesheet" href="/darkly/bootstrap.css">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h1 class="col-12 display-2">Robobar
+            <small class="text-muted">Futuristic drinks</small>
+        </h1>
+    </div>
+    <div class="row" th:with="plural=((${numberOfDrinks > 1}) ? 's' : '')">
+        <h2 class="col-12 display-4" th:text="|${numberOfDrinks} drink${plural}|"></h2>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <p>Coming right up! ~bzzzt~</p>
+            <form th:action="@{/}" method="get">
+                <button class="btn btn-primary" type="submit">New order</button>
+            </form>
+        </div>
+    </div></div>
+</body>
+</html>

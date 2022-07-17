@@ -1,0 +1,60 @@
+<html>
+<head>
+    <title>Robobar - Futuristic drinks</title>
+    <link rel="stylesheet" href="/darkly/bootstrap.css">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <h1 class="col-12 display-2">Robobar
+            <small class="text-muted">Futuristic drinks</small>
+        </h1>
+    </div>
+    <div class="row" th:with="plural=((${numberOfDrinks}>1) ? 's' : '')">
+        <h2 class="col-12 display-4">Order review
+            <small class="text-muted" th:text="|${numberOfDrinks} drink${plural}|"></small>
+        </h2>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-danger" th:if="${error}" role="alert">
+                <h4 class="alert-heading">Prrt!</h4>
+                <p th:text="${error}"></p>
+            </div>
+        </div>
+        <div class="col-12">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Drink</th>
+                    <th>#</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="drink: ${drinks}" th:if="${drink.amount}">
+                    <td>
+                        <em th:text="${drink.name}"></em>
+                    </td>
+                    <td th:text="${drink.amount}"></td>
+                    <td th:text="|&euro; ${drink.price}|"></td>
+                    <td th:text="${drink.amount * drink.price}"></td>
+                </tr>
+                </tbody>
+            </table>
+            <form th:action="@{/submitOrder}" method="post">
+                <div class="form-group row" th:if="${ageCheck}">
+                    <label for="ageInput" class="col-2 col-form-label">Age</label>
+                    <div class="col-10">
+                        <input type="number" name="age" th:value="*{age}" class="form-control form-control-lg" id="ageInput">
+                    </div>
+                </div>
+                <button class="btn btn-default" th:onclick="'window.location.href=\'' + @{/cancelOrder} + '\''" type="button">Cancel</button>
+                <button class="btn btn-success" type="submit">Order</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

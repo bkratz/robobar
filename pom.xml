@@ -87,6 +87,7 @@
                             </dependency>
                         </dependencies>
                         <configuration>
+                            <!--                            <mutationEngine>gregor</mutationEngine>-->
                             <verbose>true</verbose>
                             <failWhenNoMutations>false</failWhenNoMutations>
                             <timestampedReports>false</timestampedReports>
@@ -101,14 +102,13 @@
                                 <excludedMethod>get*</excludedMethod>
                                 <excludedMethod>set*</excludedMethod>
                             </excludedMethods>
-                            <!--					<mutationThreshold>80</mutationThreshold>-->
-                            <!--					<historyInputFile>pitestHistory.txt</historyInputFile>-->
-                            <!--					<historyOutputFile>pitestHistory.txt</historyOutputFile>-->
+<!--                             <mutationThreshold>80</mutationThreshold>-->
+                             <historyInputFile>pitestHistory.txt</historyInputFile>
+                             <historyOutputFile>pitestHistory.txt</historyOutputFile>
                             <reportsDirectory>${build.outputDirectory}/static/pitest-reports</reportsDirectory>
                         </configuration>
                     </plugin>
                 </plugins>
-
             </build>
         </profile>
         <profile>

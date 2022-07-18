@@ -47,13 +47,22 @@
                 <div class="form-group row" th:if="${ageCheck}">
                     <label for="ageInput" class="col-2 col-form-label">Age</label>
                     <div class="col-10">
-                        <input type="number" name="age" th:value="*{age}" class="form-control form-control-lg" id="ageInput">
+                        <input type="number" name="age" th:value="*{age}" class="form-control form-control-lg"
+                               id="ageInput">
                     </div>
                 </div>
-                <button class="btn btn-default" th:onclick="'window.location.href=\'' + @{/cancelOrder} + '\''" type="button">Cancel</button>
+                <button class="btn btn-default" th:onclick="'window.location.href=\'' + @{/cancelOrder} + '\''"
+                        type="button">Cancel
+                </button>
                 <button class="btn btn-success" type="submit">Order</button>
             </form>
         </div>
+    </div>
+    <div class="alert alert-default" role="alert">
+        <h4 class="alert-heading">Prrt!</h4>
+        Curious about the <a target="_blank" href="/jacoco/index.html">code coverage report</a> the default <a
+            target="_blank" href="/pitest-reports/index.html">mutation testing report</a> or the descardes <a
+            target="_blank" href="/descardes-reports/index.html">mutation testing report</a>?
     </div>
 </div>
 </body>

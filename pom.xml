@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.1</version>
+        <version>3.2.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>de.birgitkratz</groupId>
@@ -42,7 +42,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.7</version>
+                <version>0.8.11</version>
                 <executions>
                     <execution>
                         <goals>
@@ -78,22 +78,22 @@
                     <plugin>
                         <groupId>org.pitest</groupId>
                         <artifactId>pitest-maven</artifactId>
-                        <version>1.9.0</version>
+                        <version>1.15.6</version>
                         <dependencies>
                             <dependency>
                                 <groupId>org.pitest</groupId>
                                 <artifactId>pitest-junit5-plugin</artifactId>
-                                <version>1.0.0</version>
+                                <version>1.2.1</version>
                             </dependency>
                         </dependencies>
                         <configuration>
-                            <!--                            <mutationEngine>gregor</mutationEngine>-->
+                            <mutationEngine>gregor</mutationEngine>
                             <verbose>true</verbose>
                             <failWhenNoMutations>false</failWhenNoMutations>
                             <timestampedReports>false</timestampedReports>
                             <mutators>STRONGER</mutators>
                             <excludedClasses>
-                                <excludedClass>**/RobobarApplication.class</excludedClass>
+                                <excludedClass>de.birgitkratz.robobar.RobobarApplication</excludedClass>
                             </excludedClasses>
                             <excludedMethods>
                                 <excludedMethod>equals</excludedMethod>
@@ -105,7 +105,7 @@
 <!--                             <mutationThreshold>80</mutationThreshold>-->
                              <historyInputFile>pitestHistory.txt</historyInputFile>
                              <historyOutputFile>pitestHistory.txt</historyOutputFile>
-                            <reportsDirectory>${build.outputDirectory}/static/pitest-reports</reportsDirectory>
+                            <reportsDirectory>${project.build.outputDirectory}/static/pitest-reports</reportsDirectory>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -123,7 +123,7 @@
                             <dependency>
                                 <groupId>org.pitest</groupId>
                                 <artifactId>pitest-junit5-plugin</artifactId>
-                                <version>0.15</version>
+                                <version>0.16</version>
                             </dependency>
                             <dependency>
                                 <groupId>eu.stamp-project</groupId>
@@ -136,9 +136,9 @@
                             <verbose>true</verbose>
                             <failWhenNoMutations>false</failWhenNoMutations>
                             <timestampedReports>false</timestampedReports>
-                            <reportsDirectory>${build.outputDirectory}/static/descartes-reports</reportsDirectory>
+                            <reportsDirectory>${project.build.outputDirectory}/static/descartes-reports</reportsDirectory>
                             <excludedClasses>
-                                <excludedClass>de.birgitkratz.robobar.RobobarApplication*</excludedClass>
+                                <excludedClass>de.birgitkratz.robobar.RobobarApplication</excludedClass>
                             </excludedClasses>
                             <excludedMethods>
                                 <excludedMethod>equals</excludedMethod>

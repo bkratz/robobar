@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
@@ -51,10 +53,15 @@ class RobobarControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        final var drinks = (List<Drink>) result.getModelAndView().getModel().get("drinks");
-        assertThat(drinks.get(0).amount()).isEqualTo(0);
-        assertThat(drinks.get(1).amount()).isEqualTo(1);
-        assertThat(drinks.get(2).amount()).isEqualTo(0);
+        final var drinks = Optional.ofNullable(result.getModelAndView())
+                .map(ModelAndView::getModelMap)
+                .map(mm -> (List<Drink>)mm.get("drinks"))
+                .orElse(null);
+
+        assertThat(drinks)
+                .hasSize(3)
+                .extracting("amount")
+                .containsExactly(0, 1, 0);
     }
 
     @Test
@@ -69,10 +76,15 @@ class RobobarControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        final var drinks = (List<Drink>) result.getModelAndView().getModel().get("drinks");
-        assertThat(drinks.get(0).amount()).isEqualTo(1);
-        assertThat(drinks.get(1).amount()).isEqualTo(1);
-        assertThat(drinks.get(2).amount()).isEqualTo(1);
+        final var drinks = Optional.ofNullable(result.getModelAndView())
+                .map(ModelAndView::getModelMap)
+                .map(mm -> (List<Drink>)mm.get("drinks"))
+                .orElse(null);
+
+        assertThat(drinks)
+                .isNotEmpty()
+                .extracting(Drink::amount)
+                .allMatch(amount -> amount == 1);
     }
 
     @Test
@@ -82,8 +94,16 @@ class RobobarControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        final var drinks = (List<Drink>) result.getModelAndView().getModel().get("drinks");
-        assertThat(drinks.get(0).amount()).isEqualTo(0);
+        final var drinks = Optional.ofNullable(result.getModelAndView())
+                .map(ModelAndView::getModelMap)
+                .map(mm -> (List<Drink>)mm.get("drinks"))
+                .orElse(null);
+
+        assertThat(drinks)
+                .filteredOn(drink -> drink.id() == 1)
+                .hasSize(1)
+                .first()
+                .hasFieldOrPropertyWithValue("amount", 0);
     }
 
     @Test
@@ -93,13 +113,20 @@ class RobobarControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        final var model = result.getModelAndView().getModel();
-        final var drinks = (List<Drink>) model.get("drinks");
-        assertThat(drinks.get(0).amount()).isEqualTo(0);
-        assertThat(drinks.get(1).amount()).isEqualTo(0);
-        assertThat(drinks.get(2).amount()).isEqualTo(0);
+        final var modelMap = Optional.ofNullable(result.getModelAndView())
+                .map(ModelAndView::getModelMap);
+        final var drinks = modelMap
+                .map(mm -> (List<Drink>)mm.get("drinks"))
+                .orElse(null);
+        final var totalPrice = modelMap
+                .map(mm -> (BigDecimal)mm.get("totalPrice"))
+                .orElse(null);
 
-        assertThat(model.get("totalPrice")).isEqualTo(new BigDecimal("0.00"));
+        assertThat(drinks)
+                .isNotEmpty()
+                .extracting(Drink::amount)
+                .allMatch(amount -> amount == 0);
+        assertThat(totalPrice).isEqualTo("0.00");
     }
 
     @Test
@@ -112,7 +139,11 @@ class RobobarControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        final var numberOfDrinks = (int)result.getModelAndView().getModel().get("numberOfDrinks");
+        final var numberOfDrinks = Optional.ofNullable(result.getModelAndView())
+                .map(ModelAndView::getModelMap)
+                .map(modelMap -> (Integer)modelMap.get("numberOfDrinks"))
+                .orElse(null);
+
         assertThat(numberOfDrinks).isEqualTo(2);
     }
 
@@ -127,7 +158,11 @@ class RobobarControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        final var ageCheck = (boolean) result.getModelAndView().getModel().get("ageCheck");
+        final var ageCheck = Optional.ofNullable(result.getModelAndView())
+                .map(ModelAndView::getModelMap)
+                .map(modelMap -> (Boolean)modelMap.get("ageCheck"))
+                .orElse(null);
+
         assertThat(ageCheck).isTrue();
     }
 
@@ -142,7 +177,11 @@ class RobobarControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        final var numberOfDrinks = (int)result.getModelAndView().getModel().get("numberOfDrinks");
+        final var numberOfDrinks = Optional.ofNullable(result.getModelAndView())
+                .map(ModelAndView::getModelMap)
+                .map(modelMap -> (Integer)modelMap.get("numberOfDrinks"))
+                .orElse(null);
+
         assertThat(numberOfDrinks).isEqualTo(3);
     }
 
@@ -157,13 +196,20 @@ class RobobarControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        final var model = result.getModelAndView().getModel();
-        final var drinks = (List<Drink>) model.get("drinks");
-        assertThat(drinks.get(0).amount()).isEqualTo(0);
-        assertThat(drinks.get(1).amount()).isEqualTo(0);
-        assertThat(drinks.get(2).amount()).isEqualTo(0);
+        final var modelMap = Optional.ofNullable(result.getModelAndView())
+                .map(ModelAndView::getModelMap);
+        final var drinks = modelMap
+                .map(mm -> (List<Drink>)mm.get("drinks"))
+                .orElse(null);
+        final var totalPrice = modelMap
+                .map(mm -> (BigDecimal)mm.get("totalPrice"))
+                .orElse(null);
 
-        assertThat(model.get("totalPrice")).isEqualTo(new BigDecimal("0.00"));
+        assertThat(drinks)
+                .isNotEmpty()
+                .extracting(Drink::amount)
+                .allMatch(amount -> amount == 0);
+        assertThat(totalPrice).isEqualTo("0.00");
     }
 
 }
